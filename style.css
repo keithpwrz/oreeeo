@@ -1,65 +1,98 @@
 * { box-sizing: border-box; }
 
+:root {
+  --bg: #cfcfcf;       /* gray theme */
+  --panel: #bdbdbd;
+  --text: #111;
+  --border: #9f9f9f;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  background: var(--bg);
+  color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
-  background: #ffffff;
-  color: #111;
 }
 
-.wrap {
-  width: min(560px, 92vw);
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  padding: 24px 14px 8px 14px;
   text-align: center;
-  padding: 22px 14px;
 }
 
 .gif {
-  width: 320px;
-  max-width: 80vw;
+  width: 340px;
+  max-width: 85vw;
   height: auto;
   display: block;
   margin: 0 auto 14px auto;
 }
 
 .question {
-  margin: 0 0 16px 0;
-  font-size: 16px;
+  margin: 0;
+  font-size: 26px;     /* bigger text */
+  font-weight: 700;
 }
 
-.btnRow {
+.bottom {
+  flex: 1;                        /* fills the rest of screen */
   position: relative;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.controls {
   display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 18px;
-  min-height: 70px;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Buttons baseline */
 .btn {
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #111;
-  padding: 10px 18px;
-  font-size: 14px;
+  border: 2px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 10px;
   cursor: pointer;
-  border-radius: 6px;
+  font-weight: 700;
 }
 
+/* Start sizes (bigger than before) */
 .yes {
-  transition: transform 140ms ease, width 140ms ease, height 140ms ease;
+  width: 140px;
+  height: 60px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 180ms ease, height 180ms ease, font-size 180ms ease, border-radius 180ms ease;
 }
 
-/* Final step: make YES cover the whole button row (so it covers the No button area) */
-.yes.cover {
+.no {
+  padding: 14px 18px;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+/* Final state: YES fills the entire bottom area (below the gif) */
+.bottom.final .controls {
   position: absolute;
   inset: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.bottom.final #yesBtn {
   width: 100%;
   height: 100%;
-  z-index: 10;
-  transform: none !important;
-  border-radius: 10px;
-  font-size: 18px;
+  font-size: 48px;
+  border-radius: 0;
 }
