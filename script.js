@@ -1,5 +1,5 @@
 const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
+const noBtn  = document.getElementById("noBtn");
 const bottom = document.getElementById("bottom");
 
 const noTexts = [
@@ -11,15 +11,9 @@ const noTexts = [
   "if you say no i'll be very sad"
 ];
 
-// Size steps for YES after each No click (1..6)
-const yesSizes = [
-  { w: 220, h: 80,  fs: 26 },  // after 1st No
-  { w: 320, h: 100, fs: 30 },  // after 2nd No
-  { w: 440, h: 130, fs: 34 },  // after 3rd No
-  { w: 560, h: 170, fs: 38 },  // after 4th No
-  { w: 700, h: 220, fs: 42 }   // after 5th No
-  // after 6th No -> fullscreen handled separately
-];
+// Aggressive scaling steps (so it actually fills like the video)
+// click 1..5 => scales[0..4]; click 6 => final fullscreen state
+const scales = [1.55, 2.15, 2.95, 3.95, 5.25];
 
 let clicks = 0;
 
@@ -28,24 +22,27 @@ yesBtn.addEventListener("click", () => {
 });
 
 noBtn.addEventListener("click", () => {
-  // Set NO text exactly in your order
+  // Set exact NO text for this click
   if (clicks < noTexts.length) {
     noBtn.textContent = noTexts[clicks];
   }
 
   clicks += 1;
 
-  // Grow YES each click
+  // Grow YES a lot each click (1..5)
   if (clicks <= 5) {
-    const s = yesSizes[clicks - 1];
-    yesBtn.style.width = `${s.w}px`;
-    yesBtn.style.height = `${s.h}px`;
-    yesBtn.style.fontSize = `${s.fs}px`;
+    yesBtn.style.transform = `scale(${scales[clicks - 1]})`;
   }
 
-  // Final click: YES becomes full width + full height of the bottom section
-  if (clicks === noTexts.length) {
-    bottom.classList.add("final");
-    noBtn.style.display = "none";   // last No click is the last possible click
+  // After the 5th click, make NO tiny + in the corner (hard to click)
+  if (clicks === 5) {
+    bottom.classList.add("hard");
+  }
+
+  // Final (6th) click: brief moment then ONLY YES fills under the question
+  if (clicks === 6) {
+    setTimeout(() => {
+      bottom.classList.add("final");
+    }, 200);
   }
 });
