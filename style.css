@@ -1,98 +1,127 @@
 * { box-sizing: border-box; }
 
-:root {
-  --bg: #cfcfcf;       /* gray theme */
-  --panel: #bdbdbd;
+:root{
+  --bg: #bfbfbf;
+  --panel: #a9a9a9;
+  --border: #8f8f8f;
   --text: #111;
-  --border: #9f9f9f;
 }
 
-body {
+html, body {
+  height: 100%;
+  overflow-x: hidden;          /* no left/right scroll */
+}
+
+body{
   margin: 0;
-  min-height: 100vh;
   background: var(--bg);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.page {
-  min-height: 100vh;
+.page{
+  min-height: 100dvh;          /* better on mobile than 100vh */
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;          /* no left/right scroll */
 }
 
-.top {
-  padding: 24px 14px 8px 14px;
+.top{
   text-align: center;
+  padding: 18px 14px 6px 14px;
 }
 
-.gif {
-  width: 340px;
-  max-width: 85vw;
+.gif{
+  width: min(360px, 86vw);
   height: auto;
   display: block;
-  margin: 0 auto 14px auto;
+  margin: 0 auto 12px auto;
 }
 
-.question {
+.question{
   margin: 0;
-  font-size: 26px;     /* bigger text */
-  font-weight: 700;
+  font-weight: 800;
+  font-size: clamp(22px, 4.5vw, 34px); /* bigger text */
 }
 
-.bottom {
-  flex: 1;                        /* fills the rest of screen */
+/* The whole area UNDER the question */
+.bottom{
+  flex: 1;
   position: relative;
-  display: grid;
-  place-items: center;
-  padding: 18px;
-}
-
-.controls {
+  overflow: hidden;            /* clips oversized YES so it doesn’t create scroll */
   display: flex;
-  gap: 18px;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;     /* buttons sit higher (near question) */
+  padding: 6px 14px 14px 14px;
 }
 
-/* Buttons baseline */
-.btn {
+.controls{
+  position: relative;
+  width: min(980px, 100%);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;     /* buttons high */
+  gap: 14px;
+  padding-top: 6px;            /* bring them closer to question */
+}
+
+/* Base button style */
+.btn{
   border: 2px solid var(--border);
   background: var(--panel);
   color: var(--text);
   border-radius: 10px;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
 }
 
-/* Start sizes (bigger than before) */
-.yes {
-  width: 140px;
-  height: 60px;
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: width 180ms ease, height 180ms ease, font-size 180ms ease, border-radius 180ms ease;
+/* YES starts bigger and grows via transform (aggressive in JS) */
+.yes{
+  padding: 16px 34px;
+  min-width: 180px;
+  min-height: 64px;
+  font-size: clamp(20px, 4vw, 28px);
+  transform-origin: center;
+  transition: transform 160ms ease, border-radius 160ms ease, font-size 160ms ease;
 }
 
-.no {
+/* NO text readable on phone */
+.no{
   padding: 14px 18px;
-  font-size: 18px;
+  font-size: clamp(16px, 3.5vw, 22px);
   white-space: nowrap;
 }
 
-/* Final state: YES fills the entire bottom area (below the gif) */
-.bottom.final .controls {
+/* Second-to-last state: NO becomes tiny + tucked away (harder to click) */
+.bottom.hard #noBtn{
   position: absolute;
-  inset: 0;
-  padding: 0;
-  margin: 0;
+  right: 10px;
+  bottom: 10px;
+  transform: scale(0.72);
+  opacity: 0.9;
+  z-index: 20;
 }
 
-.bottom.final #yesBtn {
+/* Final state: only YES fills the entire area under the question */
+.bottom.final .controls{
+  padding-top: 0;
+}
+
+.bottom.final #yesBtn{
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  font-size: 48px;
+  transform: none !important;
   border-radius: 0;
+  font-size: clamp(34px, 8vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.bottom.final #noBtn{
+  display: none;
 }
